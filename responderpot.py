@@ -12,12 +12,6 @@ def randchars(mn, mx):
 def connect(domain, username, password, client, server):
     conn = SMBConnection(username, password, client, server, domain=domain, use_ntlm_v2=True, is_direct_tcp=True)
     conn.connect('0.0.0.0', 445)
-    shares = conn.listShares()
-    for share in shares:
-        if not share.isSpecial and share.name not in ['NETLOGON', 'SYSVOL']:
-            sharedfiles = conn.listPath(share.name, '/')
-            for sharedfile in sharedfiles:
-                print(sharedfile.filename)
     conn.close()
 
 def main(domain, throttle):
