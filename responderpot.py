@@ -15,9 +15,12 @@ def connect(domain, username, password, client, server):
     try:
         conn = SMBConnection(username, password, client, server, domain=domain, use_ntlm_v2=True, is_direct_tcp=True)
         conn.connect('0.0.0.0', 445)
+        ip, port = conn.sock.getpeername()
         conn.close()
+        print('{} INFO SUSPICIOUS_SMB_RESPONSE {} {}'.format(str(datetime.datetime.now()), ip, port))
     except smb.smb_structs.ProtocolError as e:
         ip, port = conn.sock.getpeername()
+        conn.close()
         print('{} INFO SUSPICIOUS_SMB_RESPONSE {} {}'.format(str(datetime.datetime.now()), ip, port))
     except ConnectionRefusedError as e:
         pass
